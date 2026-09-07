@@ -44,9 +44,9 @@ export default function MaritimeDashboardPage() {
     shippingLanes: true,
     eezBoundary: true,
     oilFields: true,
-    weatherRadar: true,
-    radarSweep: true,
-    rangeRings: true,
+    weatherRadar: false,
+    radarSweep: false,
+    rangeRings: false,
     highRiskZones: true,
     tracks: true,
   });

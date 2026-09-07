@@ -65,6 +65,9 @@ export const MaritimeMap: React.FC<MaritimeMapProps> = ({
   const [measureDistanceNm, setMeasureDistanceNm] = useState<number | null>(null);
   const [currentZoom, setCurrentZoom] = useState<number>(INITIAL_MAP_ZOOM);
 
+  // Resolved token used for both map init and error state display
+  const token = mapboxToken || process.env.NEXT_PUBLIC_MAPBOX_TOKEN || '';
+
   // Helper to get map style spec
   const getStyleSpec = useCallback((styleId: MapStyleId, token: string) => {
     const hasValidToken = token && token.trim().length > 10;
@@ -131,7 +134,6 @@ export const MaritimeMap: React.FC<MaritimeMapProps> = ({
   useEffect(() => {
     if (!mapContainerRef.current) return;
 
-    const token = mapboxToken || process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN || '';
     if (token && token.trim().length > 10) {
       mapboxgl.accessToken = token;
     }
@@ -176,7 +178,6 @@ export const MaritimeMap: React.FC<MaritimeMapProps> = ({
   // Handle style changes dynamically
   useEffect(() => {
     if (!mapRef.current || !mapLoaded) return;
-    const token = mapboxToken || process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN || '';
     const styleSpec = getStyleSpec(currentStyle, token);
     
     mapRef.current.setStyle(styleSpec);
@@ -529,7 +530,23 @@ export const MaritimeMap: React.FC<MaritimeMapProps> = ({
 
   return (
     <div className="relative flex-1 h-[calc(100vh-3.5rem)] w-full overflow-hidden bg-slate-950">
-      
+      {/* Loading overlay */}
+      {!mapLoaded && (
+        <div className="absolute inset-0 bg-slate-900/70 flex items-center justify-center z-20">
+          <div className="text-slate-100 animate-pulse">Loading map…</div>
+        </div>
+      )}
+
+      {/* Token error banner */}
+      {(!token || token.trim().length <= 10) && (
+        <div className="absolute inset-0 bg-black/70 flex items-center justify-center z-30">
+          <div className="bg-rose-900 text-rose-100 p-4 rounded">
+            <p className="font-medium">Mapbox access token missing.</p>
+            <p className="text-sm">Set NEXT_PUBLIC_MAPBOX_TOKEN in your environment.</p>
+          </div>
+        </div>
+      )}
+
       {/* Mapbox Canvas Container */}
       <div ref={mapContainerRef} className="w-full h-full" />
 

@@ -1,0 +1,336 @@
+/* ==========================================================================
+   SpillLayer - Pulsing Centroid Marker & Tactical Popup Styling
+   ========================================================================== */
+
+/* Centroid Pulsing Marker Wrapper */
+.spill-centroid-marker {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+  pointer-events: auto;
+  user-select: none;
+  z-index: 15;
+}
+
+/* Base Ping Rings */
+.spill-pulse-ring {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  box-sizing: border-box;
+}
+
+/* Outer expanding radar ring */
+.spill-pulse-ring-outer {
+  inset: -12px;
+  border: 2px solid var(--pulse-color, #ef4444);
+  animation: spill-radar-ping 2.4s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+}
+
+/* Secondary delayed radar ring */
+.spill-pulse-ring-mid {
+  inset: -6px;
+  border: 1.5px solid var(--pulse-color, #ef4444);
+  animation: spill-radar-ping 2.4s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+  animation-delay: 0.8s;
+}
+
+/* Soft glowing aura */
+.spill-pulse-glow {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--pulse-color, #ef4444) 20%, rgba(239, 68, 68, 0) 75%);
+  opacity: 0.8;
+  animation: spill-glow-pulse 1.8s ease-in-out infinite alternate;
+}
+
+/* Solid center core dot */
+.spill-pulse-core {
+  position: relative;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: var(--pulse-color, #ef4444);
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 10px var(--pulse-color, #ef4444), 0 0 20px rgba(239, 68, 68, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.spill-centroid-marker:hover .spill-pulse-core {
+  transform: scale(1.35);
+  box-shadow: 0 0 16px var(--pulse-color, #ef4444), 0 0 28px rgba(239, 68, 68, 0.9);
+}
+
+.spill-pulse-inner-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: #ffffff;
+}
+
+/* Centroid Tooltip Label */
+.spill-marker-label {
+  position: absolute;
+  top: 100%;
+  margin-top: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(15, 23, 42, 0.95);
+  color: #f87171;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.spill-centroid-marker:hover .spill-marker-label {
+  opacity: 1;
+  transform: translateX(-50%) translateY(2px);
+}
+
+/* Keyframe Animations */
+@keyframes spill-radar-ping {
+  0% {
+    transform: scale(0.3);
+    opacity: 0.95;
+  }
+  75% {
+    transform: scale(2.2);
+    opacity: 0.15;
+  }
+  100% {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
+
+@keyframes spill-glow-pulse {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1.3);
+    opacity: 0.95;
+  }
+}
+
+/* ==========================================================================
+   Mapbox Popup Custom Theme for Oil Spill Details
+   ========================================================================== */
+
+.mapboxgl-popup.spill-details-popup {
+  max-width: 360px !important;
+  z-index: 50;
+}
+
+.mapboxgl-popup.spill-details-popup .mapboxgl-popup-content {
+  background: rgba(15, 23, 42, 0.96) !important;
+  color: #f1f5f9 !important;
+  border-radius: 12px !important;
+  padding: 0 !important;
+  border: 1px solid rgba(239, 68, 68, 0.4) !important;
+  box-shadow: 0 20px 35px -5px rgba(0, 0, 0, 0.8), 0 0 25px rgba(239, 68, 68, 0.25) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  overflow: hidden !important;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+}
+
+.mapboxgl-popup.spill-details-popup .mapboxgl-popup-tip {
+  border-top-color: rgba(15, 23, 42, 0.96) !important;
+  border-bottom-color: rgba(15, 23, 42, 0.96) !important;
+}
+
+.mapboxgl-popup.spill-details-popup .mapboxgl-popup-close-button {
+  color: #94a3b8 !important;
+  font-size: 18px !important;
+  padding: 6px 10px !important;
+  right: 6px !important;
+  top: 6px !important;
+  border-radius: 6px !important;
+  background: transparent !important;
+  border: none !important;
+  transition: all 0.15s ease !important;
+  z-index: 10 !important;
+}
+
+.mapboxgl-popup.spill-details-popup .mapboxgl-popup-close-button:hover {
+  color: #ffffff !important;
+  background: rgba(239, 68, 68, 0.2) !important;
+}
+
+/* Popup Content Card Layout */
+.spill-popup-card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.spill-popup-header {
+  padding: 14px 16px 10px;
+  background: linear-gradient(180deg, rgba(239, 68, 68, 0.15) 0%, rgba(239, 68, 68, 0.02) 100%);
+  border-bottom: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.spill-popup-badge-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.spill-badge-hazard {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+.spill-badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #ef4444;
+  box-shadow: 0 0 6px #ef4444;
+  animation: spill-glow-pulse 1s infinite alternate;
+}
+
+.spill-popup-id {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 10px;
+  color: #94a3b8;
+  padding-right: 20px;
+}
+
+.spill-popup-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.3;
+  margin: 0;
+}
+
+/* Metrics Grid (Area, Confidence, Detection Time) */
+.spill-popup-body {
+  padding: 12px 16px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.spill-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.spill-metric-box {
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(51, 65, 85, 0.7);
+  border-radius: 8px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.spill-metric-box.spill-metric-full {
+  grid-column: span 2;
+}
+
+.spill-metric-label {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #94a3b8;
+  margin-bottom: 2px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.spill-metric-value {
+  font-size: 14px;
+  font-weight: 700;
+  color: #f8fafc;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.spill-metric-value.area-highlight {
+  color: #38bdf8;
+}
+
+.spill-metric-subtext {
+  font-size: 10px;
+  color: #64748b;
+  margin-top: 1px;
+}
+
+/* Confidence Meter Bar */
+.spill-confidence-meter {
+  width: 100%;
+  height: 4px;
+  background: rgba(51, 65, 85, 0.8);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.spill-confidence-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.4s ease;
+}
+
+/* Extra Details list */
+.spill-extra-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-top: 1px solid rgba(51, 65, 85, 0.5);
+  padding-top: 8px;
+  font-size: 11px;
+}
+
+.spill-detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #cbd5e1;
+}
+
+.spill-detail-row .label {
+  color: #64748b;
+}
+
+.spill-detail-row .value {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  color: #e2e8f0;
+}

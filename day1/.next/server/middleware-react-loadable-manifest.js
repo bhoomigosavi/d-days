@@ -1,0 +1,1 @@
+self.__REACT_LOADABLE_MANIFEST='{"app\\\\page.tsx -> @/components/Map/MaritimeMap":{"id":8028,"files":["static/css/6b954606061163c0.css","static/chunks/c36f3faa.cd5bc6cd10d1c5cd.js","static/chunks/28.d31799488ff6fe84.js"]}}';
